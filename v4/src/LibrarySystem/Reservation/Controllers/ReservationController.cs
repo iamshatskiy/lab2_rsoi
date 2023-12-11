@@ -29,6 +29,20 @@ namespace Reservation.Controllers
             return Ok(reservations);
         }
 
+        [HttpGet("api/v1/reservationsCount")]
+        public async Task<IActionResult> GetUserReservetionsCount([FromHeader(Name = "X-User-Name"), Required] string xUserName)
+        {
+            if (string.IsNullOrWhiteSpace(xUserName))
+            {
+                return BadRequest();
+
+            }
+
+            var count = await _reservationService.GetUserReservationCount(xUserName);
+
+            return Ok(count);
+        }
+
         [HttpPost("api/v1/reservations")]
         public async Task<IActionResult> CreateReservation([FromHeader(Name = "X-User-Name"), Required] string xUserName,[FromBody, Required] RentRequest request)
         {

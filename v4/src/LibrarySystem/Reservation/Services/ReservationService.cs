@@ -83,6 +83,11 @@ namespace Reservation.Services
             return await _reservationRepository.GetReservationByGuid(reservationGuid);
         }
 
+        public async Task<int> GetUserReservationCount(string userName)
+        {
+            var reservs = await _reservationRepository.GetUserReservations(userName);
+            return reservs.Count();
+        }
         public async Task<IEnumerable<ReservationResponse>> GetUserReservations(string userName)
         {
             return await _reservationRepository.GetUserReservations(userName);
