@@ -30,8 +30,8 @@ namespace Reservation.Services
                 Book_uid = updatedReservation.Book_uid,
                 Reservation_uid = updatedReservation.Reservation_uid,
                 Library_uid = updatedReservation.Library_uid,
-                Start_date = updatedReservation.Start_date,
-                Till_date = updatedReservation.Till_date,
+                Start_date = DateOnly.FromDateTime(updatedReservation.Start_date),
+                Till_date = DateOnly.FromDateTime(updatedReservation.Till_date),
                 Status = updatedReservation.Status,
                 UserName = updatedReservation.UserName
             };
@@ -71,8 +71,8 @@ namespace Reservation.Services
                 Book_uid = createdReservation.Book_uid,
                 Reservation_uid = createdReservation.Reservation_uid,
                 Library_uid = createdReservation.Library_uid,
-                Start_date = createdReservation.Start_date,
-                Till_date = createdReservation.Till_date,
+                Start_date = DateOnly.FromDateTime(createdReservation.Start_date),
+                Till_date = DateOnly.FromDateTime(createdReservation.Till_date),
                 Status = createdReservation.Status,
                 UserName = createdReservation.UserName
             };
@@ -83,10 +83,10 @@ namespace Reservation.Services
             return await _reservationRepository.GetReservationByGuid(reservationGuid);
         }
 
-        public async Task<int> GetUserReservationCount(string userName)
+        public async Task<ReservationCountResponse> GetUserReservationCount(string userName)
         {
             var reservs = await _reservationRepository.GetUserReservations(userName);
-            return reservs.Count();
+            return new ReservationCountResponse { reservationCount = reservs.Count() };
         }
         public async Task<IEnumerable<ReservationResponse>> GetUserReservations(string userName)
         {

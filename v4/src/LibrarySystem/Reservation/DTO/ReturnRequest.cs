@@ -3,6 +3,6 @@
     public class ReturnRequest
     {
         public string reservationGuid { get; set; }
-        public DateTime returnDate { get; set; }
+        public DateOnly returnDate { get; set; }
     }
 }

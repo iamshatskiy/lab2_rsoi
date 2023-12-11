@@ -1,6 +1,14 @@
 version: '3.4'
 
 services:
+  rating:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8050;
+    
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Http:/root/.aspnet/http:ro
   library:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

@@ -11,7 +11,7 @@ namespace Reservation.Interfaces
         Task<ReservationResponse> CreateReservation(string userName, Guid bookUid, Guid libraryUid, DateTime tillDate);
 
         Task<ReservationResponse> CloseReservation(Guid reservationUid, DateTime closeDate);
-        Task<int> GetUserReservationCount(string userName);
+        Task<ReservationCountResponse> GetUserReservationCount(string userName);
 
         Task DeleteReservation(Guid reservationUid);
     }

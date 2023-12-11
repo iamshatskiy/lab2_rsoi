@@ -52,7 +52,7 @@ namespace Reservation.Controllers
 
             }
 
-            var reservation = await _reservationService.CreateReservation(xUserName, Guid.Parse(request.bookUid), Guid.Parse(request.libraryUid), request.tillDate);
+            var reservation = await _reservationService.CreateReservation(xUserName, Guid.Parse(request.bookUid), Guid.Parse(request.libraryUid), request.tillDate.ToDateTime(TimeOnly.MaxValue));
 
             if (reservation == null)
             {
@@ -65,11 +65,11 @@ namespace Reservation.Controllers
         [HttpPost("api/v1/reservations/return")]
         public async Task<IActionResult> ReturnReservation([FromBody, Required] ReturnRequest request)
         {
-            var reservation = await _reservationService.CloseReservation(Guid.Parse(request.reservationGuid), request.returnDate);
+            var reservation = await _reservationService.CloseReservation(Guid.Parse(request.reservationGuid), request.returnDate.ToDateTime(TimeOnly.MinValue));
 
             if (reservation == null)
             {
-                return BadRequest();
+                return NotFound(new { message = string.Format("Бронь с Guid = {0}", request.reservationGuid) });
             }
 
             return Ok(reservation);

@@ -11,8 +11,8 @@ namespace Library.Interfaces
         Task<IEnumerable<Libraries>> GetAllLibraries();
         Task<Libraries> GetLibraryById(int Id);
         Task<LibraryResponse> GetLibraryByGuid(Guid guid);
-        Task<bool> CheckLibraryBookCount(Guid bookGuid, Guid libraryGuid);
-        Task<bool> RentBookAsync(Guid bookGuid, Guid libraryGuid, bool rent);
+        Task<CheckResponse> CheckLibraryBookCount(Guid bookGuid, Guid libraryGuid);
+        Task<CheckResponse> RentBookAsync(Guid bookGuid, Guid libraryGuid, bool rent);
 
         Task<PaginationResponse<LibraryResponse>> GetCityLibraries(int? page, int? size, string city);
 

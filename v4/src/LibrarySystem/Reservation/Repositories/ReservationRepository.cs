@@ -35,8 +35,8 @@ namespace Reservation.Repositories
                     Book_uid = reservation.Book_uid,
                     Reservation_uid = reservation.Reservation_uid,
                     Library_uid = reservation.Library_uid,
-                    Start_date = reservation.Start_date,
-                    Till_date = reservation.Till_date,
+                    Start_date = DateOnly.FromDateTime(reservation.Start_date),
+                    Till_date = DateOnly.FromDateTime(reservation.Till_date),
                     Status = reservation.Status,
                     UserName = reservation.UserName
                 });

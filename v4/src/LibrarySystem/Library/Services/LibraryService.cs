@@ -54,23 +54,23 @@ namespace Library.Services
             return await _libraryRepository.GetLibraryById(Id);
         }
 
-        public async Task<bool> CheckLibraryBookCount(Guid bookGuid, Guid libraryGuid)
+        public async Task<CheckResponse> CheckLibraryBookCount(Guid bookGuid, Guid libraryGuid)
         {
-            return await _libraryRepository.CheckLibraryBookCount(bookGuid, libraryGuid);
+            return new CheckResponse { check = await _libraryRepository.CheckLibraryBookCount(bookGuid, libraryGuid) };
         }
 
-        public async Task<bool> RentBookAsync(Guid bookGuid, Guid libraryGuid, bool rent)
+        public async Task<CheckResponse> RentBookAsync(Guid bookGuid, Guid libraryGuid, bool rent)
         {
             var library = await _libraryRepository.GetLibraryByGuid(libraryGuid);
             var book = await _libraryRepository.GetBookByGuid(bookGuid);
 
             if (library == null || book == null)
-                return false;
+                return new CheckResponse { check = false };
 
             var libraryBook = await _libraryRepository.GetLibraryBookAsync(bookGuid, libraryGuid);
-            if (libraryBook == null) 
-                return false;
-            
+            if (libraryBook == null)
+                return new CheckResponse { check = false };
+
             if (rent)
             {
                 libraryBook.Available_count -= 1;
@@ -83,7 +83,7 @@ namespace Library.Services
             _libraryRepository.RentBook(libraryBook);
             await _libraryRepository.SaveAsync();
 
-            return true;
+            return new CheckResponse { check = true };
         }
     }
 }
