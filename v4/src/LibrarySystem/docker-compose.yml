@@ -1,0 +1,41 @@
+version: '3.4'
+
+services:
+  library:
+    image: ${DOCKER_REGISTRY-}library
+    build:
+      context: .
+      dockerfile: Library/Dockerfile
+    networks:
+      - database
+    ports: 
+      - "8060:8060"
+  reservation:
+    image: ${DOCKER_REGISTRY-}reservation
+    build:
+      context: .
+      dockerfile: Reservation/Dockerfile
+    networks:
+      - database
+    ports: 
+      - "8070:8070"
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    restart: on-failure
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - database
+volumes:
+  db-data:
+
+networks:
+  database:
+    driver: bridge
