@@ -1,6 +1,6 @@
-﻿namespace Reservation.DTO
+﻿namespace LibrarySystem.DTO
 {
-    public class RentRequest
+    public class RentingRequest
     {
         public string bookUid { get; set; }
         public string libraryUid { get; set; }

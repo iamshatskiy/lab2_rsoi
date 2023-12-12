@@ -6,7 +6,7 @@
     <ProjectGuid>219a6fec-645e-42a1-bf73-fb12f976e20b</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
-    <DockerServiceName>library</DockerServiceName>
+    <DockerServiceName>librarysystem</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.yml" />

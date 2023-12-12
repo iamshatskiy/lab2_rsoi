@@ -16,12 +16,7 @@ namespace Reservation.Repositories
 
         public async Task<Reservations> GetReservationByGuid(Guid reservationGuid)
         {
-            var reservation = await _context.Reservations.FirstOrDefaultAsync(e => e.Reservation_uid.Equals(reservationGuid));
-            if (reservation == null)
-            {
-                return null;
-            }
-            return reservation;
+            return await _context.Reservations.FirstOrDefaultAsync(e => e.Reservation_uid.Equals(reservationGuid));
         }
 
         public async Task<IEnumerable<ReservationResponse>> GetUserReservations(string userName)

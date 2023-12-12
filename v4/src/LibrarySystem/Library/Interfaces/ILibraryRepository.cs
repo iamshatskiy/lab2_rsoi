@@ -8,6 +8,8 @@ namespace Library.Interfaces
         Task<IEnumerable<Books>> GetAllBooks();
         Task<Books> GetBookById(int Id);
         Task<BookResponse> GetBookByGuid(Guid guid);
+
+        Task<Books> GetFullBookByGuid(Guid guid);
         Task<IEnumerable<Libraries>> GetAllLibraries();
         Task<Libraries> GetLibraryById(int Id);
         Task<LibraryResponse> GetLibraryByGuid(Guid guid);
@@ -20,6 +22,7 @@ namespace Library.Interfaces
         Task<bool> CheckLibraryBookCount(Guid bookGuid, Guid libraryGuid);
 
         void RentBook(LibraryBooks libraryBooks);
+        void BookUpdate(Books book);
         Task SaveAsync();
     }
 }

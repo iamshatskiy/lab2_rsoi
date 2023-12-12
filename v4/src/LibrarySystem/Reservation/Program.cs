@@ -14,16 +14,6 @@ builder.Services.AddHealthChecks();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ReservationService Docs", Version = "v1" });
-
-    // Set the comments path for the Swagger JSON and UI.
-    //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    //c.IncludeXmlComments(xmlPath);
-});
-
 builder.Services.AddDbContext<ReservationDbContext>(opt =>
 {
     var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
@@ -33,20 +23,22 @@ builder.Services.AddDbContext<ReservationDbContext>(opt =>
 
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
+builder.Services.AddCors();
+
+
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Persons API V1");
-    });
-}
+app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .WithExposedHeaders("X-Total-Count")
+                .WithExposedHeaders(""));
 
-//app.UseHttpsRedirection();
+app.UseHsts();
+
+app.UseRouting();
 
 app.MapControllers();
 app.MapHealthChecks("/manage/health");

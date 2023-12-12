@@ -13,10 +13,10 @@ namespace Reservation.Services
             _reservationRepository = reservationRepository;
         }
 
-        public async Task<ReservationResponse> CloseReservation(Guid reservationUid, DateTime closeDate)
+        public async Task<ReservationResponse?> CloseReservation(Guid reservationUid, DateTime closeDate)
         {
             var reservation = await _reservationRepository.GetReservationByGuid(reservationUid);
-            if (reservation == null)
+            if (reservation is null || reservation.Status != "RENTED")
             {
                 return null;
             }
@@ -48,7 +48,7 @@ namespace Reservation.Services
             await _reservationRepository.SaveAsync();
         }
 
-        public async Task<ReservationResponse> CreateReservation(string userName, Guid bookUid, Guid libraryUid, DateTime tillDate)
+        public async Task<ReservationResponse?> CreateReservation(string userName, Guid bookUid, Guid libraryUid, DateTime tillDate)
         {
             var guid = Guid.NewGuid(); 
             var newReservation = new Reservations {

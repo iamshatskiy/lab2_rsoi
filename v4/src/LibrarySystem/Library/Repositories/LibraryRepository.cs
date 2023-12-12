@@ -50,13 +50,13 @@ namespace Library.Repositories
         public async Task<PaginationResponse<LibraryResponse>> GetCityLibraries(int? page, int? size, string city)
         {
             var query = _context.Libraries.Where(l => l.City == city);
-            var total = await query.CountAsync();
 
             if (page.HasValue && size.HasValue)
             {
                 query = query.OrderBy(l => l.Id).Skip((page.Value - 1) * size.Value).Take(size.Value);
             }
 
+            var total = await query.CountAsync();
             var libraries = await query.ToListAsync();
 
             var libs = new List<LibraryResponse>();
@@ -82,13 +82,7 @@ namespace Library.Repositories
         public async Task<PaginationResponse<LibraryBookResponse>> GetLibraryBooks(int? page, int? size, Guid libraryGuid, bool? allShow = false)
         {
             var queryLibrary = await _context.Libraries.FirstOrDefaultAsync(e => e.Library_uid.Equals(libraryGuid));
-
-            if (queryLibrary == null)
-            {
-                return null;
-            }
-            //Получение книг, привязанных к библиотеке
-            var lbs = _context.LibraryBooks.Where(lb => lb.Library_id.Equals(queryLibrary.Id)).ToList();
+            var lbs = _context.LibraryBooks.Where(lb => lb.Library.Library_uid.Equals(libraryGuid)).ToList();
             var books = from b in _context.Books.AsEnumerable() 
                         join lb in lbs on 
                         b.Id equals lb.Book_id 
@@ -149,6 +143,11 @@ namespace Library.Repositories
             _context.LibraryBooks.Update(libraryBooks);
         }
 
+        public void BookUpdate(Books book)
+        {
+            _context.Books.Update(book);
+        }
+
         public async Task SaveAsync()
         {
             await _context.SaveChangesAsync().ConfigureAwait(false);
@@ -156,8 +155,7 @@ namespace Library.Repositories
 
         public async Task<LibraryBooks> GetLibraryBookAsync(Guid bookGuid, Guid libraryGuid)
         {
-            var lb =  await _context.LibraryBooks.Where(lb => lb.Library.Library_uid == libraryGuid && lb.Book.Book_uid == bookGuid).FirstOrDefaultAsync();
-            return lb != null ? lb : null;
+            return  await _context.LibraryBooks.Where(lb => lb.Library.Library_uid == libraryGuid && lb.Book.Book_uid == bookGuid).FirstOrDefaultAsync();
         }
 
         //TODO
@@ -166,6 +164,12 @@ namespace Library.Repositories
             var libraryBook = await _context.LibraryBooks.Where(lb => lb.Library.Library_uid == libraryGuid && lb.Book.Book_uid == bookGuid).FirstOrDefaultAsync();
 
             return libraryBook?.Available_count > 0;
+        }
+
+        public async Task<Books> GetFullBookByGuid(Guid guid)
+        {
+            return await _context.Books.FirstOrDefaultAsync(e => e.Book_uid.Equals(guid));
+            
         }
     }
 }

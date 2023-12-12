@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Reservation.Controllers
 {
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class ReservationController : Controller
     {
         readonly IReservationService _reservationService;
@@ -15,7 +16,7 @@ namespace Reservation.Controllers
             _reservationService = reservationService;
         }
 
-        [HttpGet("api/v1/reservations")]
+        [HttpGet("reservations/get")]
         public async Task<IActionResult> GetUserReservetions([FromHeader(Name = "X-User-Name"), Required] string xUserName)
         {
             if (string.IsNullOrWhiteSpace(xUserName))
@@ -29,7 +30,7 @@ namespace Reservation.Controllers
             return Ok(reservations);
         }
 
-        [HttpGet("api/v1/reservationsCount")]
+        [HttpGet("reservationsCount")]
         public async Task<IActionResult> GetUserReservetionsCount([FromHeader(Name = "X-User-Name"), Required] string xUserName)
         {
             if (string.IsNullOrWhiteSpace(xUserName))
@@ -43,8 +44,8 @@ namespace Reservation.Controllers
             return Ok(count);
         }
 
-        [HttpPost("api/v1/reservations")]
-        public async Task<IActionResult> CreateReservation([FromHeader(Name = "X-User-Name"), Required] string xUserName,[FromBody, Required] RentRequest request)
+        [HttpPost("reservation/create")]
+        public async Task<IActionResult> CreateReservation([FromHeader(Name = "X-User-Name"), Required] string xUserName,[FromBody] RentingRequest request)
         {
             if (string.IsNullOrWhiteSpace(xUserName))
             {
@@ -54,29 +55,19 @@ namespace Reservation.Controllers
 
             var reservation = await _reservationService.CreateReservation(xUserName, Guid.Parse(request.bookUid), Guid.Parse(request.libraryUid), request.tillDate.ToDateTime(TimeOnly.MaxValue));
 
-            if (reservation == null)
-            {
-                return BadRequest();
-            }
-
             return Ok(reservation);
         }
 
-        [HttpPost("api/v1/reservations/return")]
+        [HttpPost("reservation/return")]
         public async Task<IActionResult> ReturnReservation([FromBody, Required] ReturnRequest request)
         {
             var reservation = await _reservationService.CloseReservation(Guid.Parse(request.reservationGuid), request.returnDate.ToDateTime(TimeOnly.MinValue));
 
-            if (reservation == null)
-            {
-                return NotFound(new { message = string.Format("Бронь с Guid = {0}", request.reservationGuid) });
-            }
-
             return Ok(reservation);
         }
 
 
-        [HttpDelete("api/v1/reservations")]
+        [HttpDelete("reservation/delete")]
         public async Task<IActionResult> DeleteReservation([FromBody, Required] ReturnRequest request)
         {
             await _reservationService.DeleteReservation(Guid.Parse(request.reservationGuid));

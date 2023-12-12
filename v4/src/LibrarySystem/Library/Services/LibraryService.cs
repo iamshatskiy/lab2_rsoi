@@ -85,5 +85,25 @@ namespace Library.Services
 
             return new CheckResponse { check = true };
         }
+
+        public async Task<CheckResponse> ChangeBookCondAsync(Guid bookGuid, string newCondition)
+        {
+            var book = await _libraryRepository.GetFullBookByGuid(bookGuid);
+
+            if (book == null)
+                return new CheckResponse { check = false };
+            
+            book.Condition = newCondition;
+
+            _libraryRepository.BookUpdate(book);
+            await _libraryRepository.SaveAsync();
+
+            return new CheckResponse { check = true };
+        }
+
+        public async Task<Books> GetBookFullByGuid(Guid guid)
+        {
+            return await _libraryRepository.GetFullBookByGuid(guid);
+        }
     }
 }

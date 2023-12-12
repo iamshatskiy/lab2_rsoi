@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Rating.Controllers
 {
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class RatingController : Controller
     {
 
@@ -15,7 +16,7 @@ namespace Rating.Controllers
             _ratingService = ratingService;
         }
 
-        [HttpGet("api/v1/rating")]
+        [HttpGet("rating")]
         public async Task<IActionResult> GetUserRating([FromHeader(Name = "X-User-Name"), Required] string xUserName)
         {
             if (string.IsNullOrWhiteSpace(xUserName))
@@ -28,7 +29,7 @@ namespace Rating.Controllers
             return rating == null ? BadRequest() : Ok(rating);
         }
 
-        [HttpPost("api/v1/rating")]
+        [HttpPost("rating")]
         public async Task<IActionResult> UpdateUserRating([FromHeader(Name = "X-User-Name"), Required] string xUserName, [FromBody, Required] RatingUpdateRequest request)
         {
             if (string.IsNullOrWhiteSpace(xUserName))
@@ -40,7 +41,7 @@ namespace Rating.Controllers
             return rating == null ? BadRequest() : Ok(rating);
         }
 
-        [HttpDelete("api/v1/rating")]
+        [HttpDelete("rating")]
         public async Task<IActionResult> DeleteUserRating([FromHeader(Name = "X-User-Name"), Required] string xUserName)
         {
             if (string.IsNullOrWhiteSpace(xUserName))
