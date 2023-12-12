@@ -26,8 +26,8 @@ services:
     image: ${DOCKER_REGISTRY-}librarysystem
     container_name: librarysystem
     build:
-      context: ./LibrarySystem/
-      dockerfile: LibrarySystem/Dockerfile
+      context: ./LibrarySystem
+      dockerfile: Dockerfile
     depends_on:
       - reservation
       - library
@@ -47,8 +47,8 @@ services:
     image: ${DOCKER_REGISTRY-}reservation
     container_name: reservation
     build:
-      context: ./Reservation/
-      dockerfile: Reservation/Dockerfile
+      context: ./Reservation
+      dockerfile: Dockerfile
     depends_on:
       postgres:
         condition: service_healthy
@@ -66,8 +66,8 @@ services:
     image: ${DOCKER_REGISTRY-}library
     container_name: library
     build:
-      context: ./Library/
-      dockerfile: Library/Dockerfile
+      context: ./Library
+      dockerfile: Dockerfile
     depends_on:
       postgres:
         condition: service_healthy
@@ -85,8 +85,8 @@ services:
     image: ${DOCKER_REGISTRY-}rating
     container_name: rating
     build:
-      context: ./Rating/
-      dockerfile: Rating/Dockerfile
+      context: ./Rating
+      dockerfile: Dockerfile
     depends_on:
       postgres:
         condition: service_healthy
