@@ -6,7 +6,7 @@ EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["LibrarySystem/LibrarySystem.csproj", "LibrarySystem/"]
+COPY ["LibrarySystem.csproj", "LibrarySystem/"]
 RUN dotnet restore "LibrarySystem/LibrarySystem.csproj"
 
 WORKDIR "/src/LibrarySystem"

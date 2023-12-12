@@ -6,7 +6,7 @@ EXPOSE 8060
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["Library/Library.csproj", "Library/"]
+COPY ["Library.csproj", "Library/"]
 RUN dotnet restore "Library/Library.csproj"
 
 WORKDIR "/src/Library"
