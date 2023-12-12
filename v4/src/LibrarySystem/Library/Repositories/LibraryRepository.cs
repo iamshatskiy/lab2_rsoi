@@ -36,7 +36,7 @@ namespace Library.Repositories
             return new BookResponse
             {
                 Author = book.Author,
-                Book_uid = book.Book_uid,
+                bookUid = book.Book_uid,
                 Genre = book.Genre,
                 Name = book.Name
             };
@@ -65,7 +65,7 @@ namespace Library.Repositories
                 libs.Add(new LibraryResponse { Address = library.Address,
                                                City = library.City,
                                                Name = library.Name,
-                                               Library_uid = library.Library_uid});
+                                               libraryUid = library.Library_uid});
             }
 
             var response = new PaginationResponse<LibraryResponse>() 
@@ -88,7 +88,7 @@ namespace Library.Repositories
                         b.Id equals lb.Book_id 
                         select new LibraryBookResponse 
                         { 
-                            Book_uid = b.Book_uid,
+                            bookUid = b.Book_uid,
                             Author = b.Author,
                             Name = b.Name,
                             Condition = b.Condition,
@@ -98,7 +98,7 @@ namespace Library.Repositories
 
             if (page.HasValue && size.HasValue)
             {
-                books = books.OrderBy(l => l.Book_uid).Skip((page.Value - 1) * size.Value).Take(size.Value);
+                books = books.OrderBy(l => l.bookUid).Skip((page.Value - 1) * size.Value).Take(size.Value);
             }
 
             if (allShow == false) 
@@ -129,7 +129,7 @@ namespace Library.Repositories
                 Address = library.Address,
                 City = library.City,
                 Name = library.Name,
-                Library_uid = library.Library_uid
+                libraryUid = library.Library_uid
             };
         }
 
