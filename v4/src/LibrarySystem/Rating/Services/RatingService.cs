@@ -22,7 +22,7 @@ namespace Rating.Services
 
             var entity = new Ratings
             {
-                Stars = 100,
+                Stars = 50,
                 UserName = userName
             };
 
@@ -42,17 +42,17 @@ namespace Rating.Services
             }
             if (!lessCond && !laterDate)
             {
-                rating.Stars = Math.Min(rating.Stars + 1, 100);
+                rating.Stars = Math.Min(rating.Stars + 1, 99);
             }
 
             if (lessCond)
             {
-                rating.Stars = Math.Max(rating.Stars - 10, 0);
+                rating.Stars = Math.Max(rating.Stars - 10, 1);
             }
 
             if (laterDate)
             {
-                rating.Stars = Math.Max(rating.Stars - 10, 0);
+                rating.Stars = Math.Max(rating.Stars - 10, 1);
             }
 
             _ratingRepository.UpdateRating(rating);
