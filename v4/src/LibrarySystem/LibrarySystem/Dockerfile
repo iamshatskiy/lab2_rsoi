@@ -8,8 +8,9 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["LibrarySystem/LibrarySystem.csproj", "LibrarySystem/"]
 RUN dotnet restore "LibrarySystem/LibrarySystem.csproj"
-COPY . .
+
 WORKDIR "/src/LibrarySystem"
+COPY . .
 RUN dotnet build "LibrarySystem.csproj" -c Release -o /app/build
 
 FROM build AS publish

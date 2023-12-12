@@ -8,8 +8,9 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["Rating/Rating.csproj", "Rating/"]
 RUN dotnet restore "Rating/Rating.csproj"
-COPY . .
+
 WORKDIR "/src/Rating"
+COPY . .
 RUN dotnet build "Rating.csproj" -c Release -o /app/build
 
 FROM build AS publish
