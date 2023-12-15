@@ -18,24 +18,24 @@ namespace LibrarySystem.Controllers
 
         //DONE
         [HttpGet("libraries")]
-        public async Task<IActionResult> GetCityLibraries([FromQuery, Required] string city, [FromQuery] int? page, [FromQuery] int? size)
+        public async Task<PaginationResponse<LibraryResponse>> GetCityLibraries([FromQuery, Required] string city, [FromQuery] int? page, [FromQuery] int? size)
         {
             var availableBooks = await _librarySystemService.GetCityLibraries(page, size, city);
 
-            return Ok(availableBooks);
+            return availableBooks;
         }
 
         //DONE
         [HttpGet("libraries/{libraryUid}/books")]
-        public async Task<IActionResult> GetLibraryBooks([FromRoute] string libraryUid, [FromQuery] int? page, [FromQuery] int? size, [FromQuery] bool allShow = false)
+        public async Task<PaginationResponse<LibraryBookResponse>> GetLibraryBooks([FromRoute] string libraryUid, [FromQuery] int? page, [FromQuery] int? size, [FromQuery] bool allShow = false)
         {
             var books = await _librarySystemService.GetLibraryBooks(page, size, Guid.Parse(libraryUid), allShow);
 
-            return Ok(books);
+            return books;
         }
 
         [HttpGet("reservations")]
-        public async Task<IActionResult> GetBookReservations([FromHeader(Name = "X-User-Name"), Required] string xUserName)
+        public async Task<ActionResult<IEnumerable<OpenReservationResponse>>> GetBookReservations([FromHeader(Name = "X-User-Name"), Required] string xUserName)
         {
             if (string.IsNullOrWhiteSpace(xUserName))
             {
@@ -49,7 +49,7 @@ namespace LibrarySystem.Controllers
 
         //DONE
         [HttpPost("reservations")]
-        public async Task<IActionResult> CreateBookReservation([FromHeader(Name = "X-User-Name"), Required] string xUserName, [FromBody] RentingRequest request)
+        public async Task<ActionResult<RentInfoResponse>> CreateBookReservation([FromHeader(Name = "X-User-Name"), Required] string xUserName, [FromBody] RentingRequest request)
         {
             if (string.IsNullOrWhiteSpace(xUserName))
             {
@@ -63,7 +63,7 @@ namespace LibrarySystem.Controllers
 
         //DONE
         [HttpPost("reservations/{reservationUid}/return")]
-        public async Task<IActionResult> CloseBookReservation([FromRoute, Required] string reservationUid, [FromHeader(Name = "X-User-Name"), Required] string xUserName, [FromBody] ReturnBookRequest request)
+        public async Task<ActionResult<CloseReservationResponse>> CloseBookReservation([FromRoute, Required] string reservationUid, [FromHeader(Name = "X-User-Name"), Required] string xUserName, [FromBody] ReturnBookRequest request)
         {
             string[] validConditions = { "EXCELLENT", "GOOD", "BAD" };
             if (string.IsNullOrWhiteSpace(xUserName) || !(Array.Exists(validConditions, element => element == request.condition)))
@@ -80,7 +80,7 @@ namespace LibrarySystem.Controllers
         }
 
         [HttpGet("rating")]
-        public async Task<IActionResult> GetUserRating([FromHeader(Name = "X-User-Name"), Required] string xUserName)
+        public async Task<ActionResult<RatingResponse?>> GetUserRating([FromHeader(Name = "X-User-Name"), Required] string xUserName)
         {
             if (string.IsNullOrWhiteSpace(xUserName))
             {
