@@ -18,7 +18,16 @@ jobs:
       - uses: docker/setup-buildx-action@v2
 
       # TODO build and run unit tests
+      - name: Test
+        run:  dotnet test v4/src/LibrarySystem/UnitTests/UnitTests.csproj
 
+      - name: Upload dotnet test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: dotnet-results
+          path: v4/src/LibrarySystem/UnitTests/TestResults
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}  
       - name: Build images
         timeout-minutes: 10
         run: docker compose -f v4/src/LibrarySystem/docker-compose.yml build
